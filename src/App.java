@@ -5,13 +5,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 
 
 
 public class App {
     public static void main(String[] args) throws Exception {
-    int arrayLength = 1000;
-    String fileName = "numbers.txt";
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter the length of the array: ");
+    int arrayLength = scanner.nextInt();
+    scanner.nextLine();
+    System.out.print("Enter the file name to store the array: ");
+    String fileName = scanner.nextLine();
+    scanner.close();
     int[] array = createRandomArray(arrayLength);
     writeArrayToFile(array, fileName);
     int[] readArray = readFileToArray(fileName);
