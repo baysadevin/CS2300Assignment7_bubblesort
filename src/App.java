@@ -12,27 +12,40 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Enter the length of the array: ");
-    int arrayLength = scanner.nextInt();
-    scanner.nextLine();
-    System.out.print("Enter the file name to store the array: ");
-    String fileName = scanner.nextLine();
-    scanner.close();
-    int[] array = createRandomArray(arrayLength);
-    writeArrayToFile(array, fileName);
-    int[] readArray = readFileToArray(fileName);
-    long startTime = System.nanoTime();
-    bubbleSort(readArray);
-    long endTime = System.nanoTime();
-    long duration = endTime - startTime;
-    System.out.println("Time taken to sort the array: " + duration + " nanoseconds");
-    System.out.println("Sorted array: ");
-    for (int i = 0; i < readArray.length; i++) {
-        System.out.print(readArray[i] + " ");
+        Scanner scanner = new Scanner(System.in);
+        do {
+            System.out.print("Select an option: \n1. Generate random array\n2. Sort and store array\n3. Exit\n");
+            int option = scanner.nextInt();
+            scanner.nextLine(); 
+            switch (option) {
+                case 1:
+                    System.out.print("Enter the length of the array: ");
+                    int arrayLength = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("Enter the file name to store the array: ");
+                    String fileName = scanner.nextLine();
+                    int[] array = createRandomArray(arrayLength);
+                    writeArrayToFile(array, fileName);
+                    break;
+                case 2:
+                    System.out.print("Enter the file name to read the array: ");
+                    String fileName2 = scanner.nextLine();
+                    int[] readArray = readFileToArray(fileName2);
+                    bubbleSort(readArray);
+                    System.out.print("Enter the file name to store the sorted array: ");
+                    String fileName3 = scanner.nextLine();
+                    writeArrayToFile(readArray, fileName3);
+                    break;
+                case 3:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        } while (true);
     }
-    
-}
 public static int[] createRandomArray(int arrayLength) {
     int[] array = new int[arrayLength];
     for (int i = 0; i < array.length; i++) {
@@ -45,7 +58,7 @@ public static void writeArrayToFile(int[] array, String fileName) {
         for (int i = 0; i < array.length; i++) {
             writer.write(String.valueOf(array[i]));
             if (i < array.length - 1) {
-                writer.write(",");
+                writer.write("\n");
             }
         }
     } catch (IOException e) {
@@ -57,7 +70,7 @@ public static int[] readFileToArray(String fileName) {
     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] numbers = line.split(",");
+            String[] numbers = line.split("\n");
             for (String number : numbers) {
                 list.add(Integer.parseInt(number));
             }
